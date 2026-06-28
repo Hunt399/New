@@ -14,7 +14,7 @@ export function ValuationForm() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="relative">
+    <div id="valuation" className="relative scroll-mt-24">
       {/* folded top-right corner */}
       <div className="absolute right-0 top-0 z-10 h-0 w-0 border-l-[44px] border-t-[44px] border-l-transparent border-t-[#e8c43d] drop-shadow-[-3px_3px_3px_rgba(0,0,0,0.18)]" />
       <div className="absolute right-0 top-0 z-0 h-[44px] w-[44px] bg-[#d9b528]" />

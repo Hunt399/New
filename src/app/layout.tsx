@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Ubuntu, Roboto_Slab, Roboto } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const ubuntu = Ubuntu({
   variable: "--font-ubuntu",
@@ -37,7 +39,11 @@ export default function RootLayout({
       lang="ru"
       className={`${ubuntu.variable} ${robotoSlab.variable} ${roboto.variable} antialiased`}
     >
-      <body className="min-h-screen flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

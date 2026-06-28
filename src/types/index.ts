@@ -48,3 +48,43 @@ export interface ContactInfo {
   email: string;
   address: string;
 }
+
+// Service & content pages (extracted from /service/<slug>/ etc.)
+export type ContentBlock =
+  | { t: "p"; text: string }
+  | { t: "list"; items: string[] };
+
+export interface ContentSection {
+  heading: string;
+  items: ContentBlock[];
+}
+
+export interface PriceTable {
+  headers: string[];
+  rows: string[][];
+}
+
+export interface ServicePageData {
+  title: string;
+  intro: ContentBlock[];
+  sections: ContentSection[];
+  table: PriceTable | null;
+}
+
+// Text pages (О компании, Контакты) and blog posts
+export type PageBlock =
+  | { t: "p"; text: string }
+  | { t: "h"; text: string }
+  | { t: "list"; items: string[] };
+
+export interface TextPageData {
+  title: string;
+  blocks: PageBlock[];
+}
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  image: string | null;
+  blocks: PageBlock[];
+}
