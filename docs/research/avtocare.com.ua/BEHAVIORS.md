@@ -1,51 +1,36 @@
-# avtocare.com.ua - Behaviors and Interaction Sweep
+# avtocare.com.ua — Behaviors (live interaction sweep)
 
-This document specifies the interactive behaviors, scroll thresholds, hover states, and responsive shifts observed on `https://avtocare.com.ua/`.
+## 1. Interaction model
+Mostly **static** page. Only two dynamic behaviors: (a) scroll-driven sticky header, (b) the bought-cars carousel. FAQ is NOT an accordion — all answers render expanded as static prose. No Lenis/smooth-scroll lib detected (native scroll). No scroll-snap.
 
-## 1. Interaction Model
-The target site is a high-conversion landing page focused on **lead generation** (car buyback request forms).
-* **Core Interaction:** Form submissions (Valuation form, callback forms).
-* **Secondary Interaction:** Interactive modals (callback popups) and sliders (reviews/recent deals).
+## 2. Sticky header (scroll-driven) — KEY BEHAVIOR
+- **State A — scroll 0 (over hero):** header sits over dark hero, background transparent, logo large (white "AvtoCar"), nav links white, active "Главная" orange `#F39F18` with thin underline indicator. Two phone numbers grey `#A8A8A8` top-left.
+- **State B — scrolled (`#Top_bar.is-sticky`):** `position: fixed; top:0; z-index:701; height:61px; background:#0F0F17; box-shadow:0 2px 5px rgba(0,0,0,.1)`. Logo shrinks to ~50px tall. Nav links grey `#CDC6BD`, active "Главная" orange `#F39F18`. Phones grey.
+- **Trigger:** scroll past hero header zone. Implement with scroll listener toggling `isScrolled` when `window.scrollY > 100`.
+- **Transition:** background/shadow/logo-size animate ~0.3s ease.
+- Header theme is DARK in both states (transparent dark → solid dark). It does NOT turn white.
 
----
+## 3. Carousel — "Последние выкупленные нами автомобили"
+- 9 slides, **3 visible** at desktop. Each card = car photo with bottom dark gradient overlay + white text (model+year, mileage, price). Owl/revolution-style carousel.
+- Implement: horizontal slider, 3 per view desktop / 2 tablet / 1 mobile, prev-next + optional auto-advance. Drag/arrows acceptable.
 
-## 2. Navigation & Header
-* **Behavior:** Sticky navigation bar.
-* **Scroll Threshold:** Once scrolled past 50px, the header background transitions to semi-transparent white (backdrop-filter: blur) and shrinks slightly.
-* **Hover States:**
-  * **Phone Numbers:** Color changes with a smooth CSS transition (duration: 200ms).
-  * **Language Switcher:** Active language has a distinct background/text style; hovering over the inactive language displays a light hover overlay.
-* **Responsive Shift:**
-  * **Desktop (>768px):** Displays full contact phone numbers directly next to the logo.
-  * **Mobile (<768px):** Collapses menu options, replacing them with a persistent tap-to-call floating button or a streamlined header with a prominent telephone icon for direct dialing.
+## 4. Hover states
+- Nav links: color shift toward orange/white on hover.
+- Buttons (black): subtle darken on hover, cursor pointer, no radius change.
+- WhyUs icon circles / variant icons / slider cards: slight emphasis on hover (scale/shadow) — keep subtle (~0.2s ease). Extract exact per component if needed; default `transition: all .2s ease`.
 
----
+## 5. Responsive (tested 1440 / 768 / 390)
+- **Header:** desktop horizontal nav; mobile collapses to hamburger (BeTheme mobile menu). Phones may hide on small.
+- **Hero:** desktop = heading left + yellow form card right (2-col); mobile = stacked, form below heading, full-width.
+- **WhyUs:** 4 columns desktop → 2 cols tablet → 1 col mobile.
+- **Process steps:** 4 across desktop → 2 → 1 stacked.
+- **Variants:** 3 across → stack.
+- **CTA:** image left + card right desktop → stacked mobile.
+- **Brands:** 4-col → 2-col → 1-col list.
+- **Slider:** 3 → 2 → 1 per view.
+- **Reviews:** 2-col → 1-col.
+- Breakpoint ≈ 768px primary collapse; secondary ≈ 992/1240 for container.
 
-## 3. Valuation Form (Форма онлайн-оценки)
-* **Location:** Embedded in the Hero Section.
-* **Fields:**
-  * Марка автомобиля (text/input)
-  * Модель автомобиля (text/input)
-  * Год выпуска (text/input)
-  * Ваш телефон (tel/input)
-* **Interactions:**
-  * Inputs have a focus ring animation (border color transitions to brand accent with a subtle shadow).
-  * Submit button: Elevates slightly on hover, transitions background color, and displays a loading spinner once clicked.
-  * **Validation:** Custom error messages show up immediately under inputs if submitted with empty or invalid values (e.g. invalid phone format).
-
----
-
-## 4. Sliders and Carousels
-* **Recent Deals (Последние выкупленные авто):**
-  * Auto-playing carousel showing recent buyback transactions.
-  * Drag-to-scroll enabled on touch viewports.
-* **Reviews (Отзывы):**
-  * Interactive testimonials carousel with indicator dots.
-  * Uses CSS transform and opacity to transition reviews smoothly.
-
----
-
-## 5. Responsive Sweep
-* **Desktop (1440px):** 3-column / 4-column grids for "Why Us" and "How It Works". Horizontal alignment.
-* **Tablet (768px):** Grid columns collapse to 2 columns where appropriate. Padding decreases by 20%.
-* **Mobile (390px):** Single-column stacked layout. Form inputs stretch to full-width (100%). Phone links are enlarged for thumb-friendly tap targets.
+## 6. Forms
+- Hero valuation form: 5 fields (Марка, Модель, Год выпуска, Ваш телефон, Дополнительная информация textarea) + black "Узнать стоимость" submit. Clone visual + client-side only (no backend).
+- CTA "ОБРАТНЫЙ ЗВОНОК" and "Оставить заявку" buttons: visual only (could anchor to form / tel:).

@@ -1,34 +1,35 @@
-# avtocare.com.ua - Page Topology
+# avtocare.com.ua — Page Topology (live)
 
-This document details the layout architecture and visual flow of the landing page at `https://avtocare.com.ua/`.
+Single long landing page, top→bottom. Container max-width ~1240px centered. Section y-offsets @1440 in parens.
 
-## Page Structure Overview
-The homepage is structured as a vertical, single-page marketing landing page with multiple section components feeding into a unified lead capture flow.
-
----
-
-## Visual Layout Sequence
-
-| Order | Component Name | Layout Type | Interaction Model | Files Involved |
+| # | Section | Bg | Interaction | Component |
 |---|---|---|---|---|
-| **0** | **Header/Nav** | Sticky overlay | Static contacts + language switcher | `src/components/Header.tsx` |
-| **1** | **Hero & Valuation** | 2-Column (Desktop) / Stacked (Mobile) | Inline Form submit (`/car-appraisal`) | `src/components/HeroSection.tsx`, `src/components/ValuationForm.tsx` |
-| **2** | **Why Us (Почему мы)** | 4-Column Grid | Static with hover scale effects | `src/components/WhyUs.tsx` |
-| **3** | **Benefits Info (Выгода)** | Content + Image split | Static text | `src/components/BenefitsInfo.tsx` |
-| **4** | **How It Works (Процесс)** | 4-Step pipeline | Step progress indicator (Scroll-reveal) | `src/components/HowItWorks.tsx` |
-| **5** | **General Info (Что такое...)** | Text Block | Static text | `src/components/GeneralInfo.tsx` |
-| **6** | **Buyback Options (Варианты)** | 3-Card Grid | Hover zoom, callback button click | `src/components/BuybackOptions.tsx` |
-| **7** | **Process Details (Детали)** | 6-Card Grid | Hover highlights | `src/components/ProcessDetails.tsx` |
-| **8** | **Required Documents** | List with icons | Highlighted targets | `src/components/RequiredDocuments.tsx` |
-| **9** | **Car Brands Grid** | Grid of logos | Static logos | `src/components/CarBrandsGrid.tsx` |
-| **10** | **Recent Purchases (Сделки)** | Carousel slider | Drag-to-scroll, click photo | `src/components/RecentPurchases.tsx` |
-| **11** | **Reviews (Отзывы)** | Carousel slider | Auto-play + dot indicators | `src/components/Reviews.tsx` |
-| **12** | **Footer** | 3-Column Footer | Contact links, social icons, map | `src/components/Footer.tsx` |
+| 0 | **Header / Nav** (fixed overlay) | transparent→#0F0F17 on scroll | scroll-driven sticky | `Header.tsx` |
+| 1 | **Hero** (0) | dark gradient (#000→transparent) | static + form | `Hero.tsx` + `ValuationForm.tsx` |
+| 2 | **WhyUs "Почему мы"** (965) | yellow #FFDA4B | static, hover icons | `WhyUs.tsx` |
+| 3 | **"Автовыкуп — это выгодно"** (1626) | white | static text | folded into `ProcessSection` intro or `RichText` |
+| 4 | **Process "Как происходит процесс"** (1864) | white | static (4 steps) | `ProcessSteps.tsx` |
+| 5 | **"Что такое выкуп авто"** (2303) | white | static bullet text | `RichText` block |
+| 6 | **Variants "ПРЕДЛАГАЕМ ВАРИАНТЫ"** (2692) | white | static 3 icons | `Variants.tsx` |
+| 7 | **CTA banner "Обратитесь к нам"** (2941) | yellow #FFDA4B | static + button | `CtaBanner.tsx` |
+| 8 | **SEO long-text "Как происходит выкуп…"** (3308) | yellow #FFDA4B | static, multiple sub-headings + lists | `SeoContent.tsx` |
+| 9 | **Docs "ДОКУМЕНТЫ, КОТОРЫЕ НУЖНО ИМЕТЬ"** (4721) | dark #0F0F17, faded car bg, folded corner | static, 4 bullets | `DocsSection.tsx` |
+| 10 | **Brands "Мы занимаемся авто выкупом…"** (5117) | white | static 4-col list | `BrandsList.tsx` |
+| 11 | **Slider "ПОСЛЕДНИЕ ВЫКУПЛЕННЫЕ"** (5614) | white | carousel, 9 slides, shows 3 | `BoughtSlider.tsx` |
+| 12 | **Reviews "Отзывы"** (6034) | white | static 2-col, 4 items | `Reviews.tsx` |
+| 13 | **FAQ "Популярные вопросы"** (6538) | white | static Q&A (NOT accordion — all expanded) | `Faq.tsx` |
+| 14 | **Footer** (7438) | dark #0F0F17 | static | `Footer.tsx` |
 
----
+## Z-index / sticky
+- Header `#Top_bar.is-sticky`: `position: fixed; top:0; z-index:701; height:61px; box-shadow:0 2px 5px rgba(0,0,0,.1)`.
+- All other sections are normal flow.
 
-## Z-Index Layering
-* `z-50` — Callback Dialog Modal
-* `z-40` — Sticky Navigation Header
-* `z-10` — Floating Action Button (Quick Call)
-* `z-0` — Main content flow, section backgrounds, hero overlay
+## Build order
+1. Foundation (fonts, globals, types, icons, assets) — done by foreman.
+2. Sub-components first: `ValuationForm`, then section wrappers.
+3. Parallel builders per section; merge; `npm run build` after each.
+4. Assemble in `page.tsx` top→bottom.
+
+## Notes
+- Sections 3 & 5 & 8 are mostly long SEO prose — group sensibly to avoid over-fragmentation, but keep distinct headings.
+- Nav menu: Главная (active) / Услуги ▾ (dropdown) / Блог / О нас / Контакты + lang selector "Русский ▾". Clone visual only (no real routing/dropdown data required beyond visual).
