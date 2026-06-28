@@ -15,12 +15,31 @@ export const CONTACTS: ContactInfo = {
   address: "Киев, ул. Бережанская, 13",
 };
 
+export interface ServiceLink {
+  label: string;
+  slug: string;
+}
+
+// Услуги submenu — slugs mirror the original /service/<slug>/ paths
+export const SERVICES: ServiceLink[] = [
+  { label: "Выкуп авто в любом состоянии", slug: "vykup-avto-v-lyubom-sostoyanii" },
+  { label: "Выкуп авто на запчасти", slug: "vykup-avto-na-zapchasti" },
+  { label: "Выкуп грузовых авто", slug: "vykup-gruzovyh-avto" },
+  { label: "Выкуп залоговых авто", slug: "vykup-zalogovyh-avto" },
+  { label: "Выкуп кредитных авто", slug: "vykup-kreditnyh-avto" },
+  { label: "Выкуп нерастаможенных авто", slug: "vykup-nerastamozhennyh-avto-na-evronomerah" },
+  { label: "Выкуп проблемных авто", slug: "vykup-problemnyh-avto" },
+  { label: "Выкуп старых авто ВАЗ, ЗАЗ", slug: "vykup-staryh-avto" },
+  { label: "Оценка авто онлайн", slug: "oczenka-avto-onlajn" },
+  { label: "Выкуп авто без документов", slug: "vykup-avto-bez-dokumentov-v-kieve" },
+];
+
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Главная", href: "#", active: true },
-  { label: "Услуги", href: "#", hasDropdown: true },
-  { label: "Блог", href: "#" },
-  { label: "О нас", href: "#" },
-  { label: "Контакты", href: "#" },
+  { label: "Главная", href: "/" },
+  { label: "Услуги", href: "/service", hasDropdown: true },
+  { label: "Блог", href: "/blog" },
+  { label: "О нас", href: "/o-kompanii" },
+  { label: "Контакты", href: "/kontakty" },
 ];
 
 export const HERO = {
