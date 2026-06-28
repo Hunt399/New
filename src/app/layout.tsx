@@ -1,20 +1,30 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Ubuntu, Roboto_Slab, Roboto } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const ubuntu = Ubuntu({
+  variable: "--font-ubuntu",
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const robotoSlab = Roboto_Slab({
+  variable: "--font-roboto-slab",
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "600", "700"],
+});
+
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Website Clone",
-  description: "Pixel-perfect website clone",
+  title: "Автовыкуп Киев - Выкуп Авто в Киеве с пробегом Дорого",
+  description:
+    "AvtoCar — выкуп авто в Киеве с 2016 года. Деньги за 1 час, до 94% рыночной стоимости. Любое состояние, бесплатный выезд оценщика.",
+  icons: { icon: "/seo/favicon.ico" },
 };
 
 export default function RootLayout({
@@ -24,10 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="ru"
+      className={`${ubuntu.variable} ${robotoSlab.variable} ${roboto.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col">{children}</body>
     </html>
   );
 }
