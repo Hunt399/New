@@ -3,12 +3,48 @@
 import { useState } from "react";
 import { HERO } from "@/lib/content";
 
+// Per-field input hints so phones show the right keyboard (digits for year,
+// dial pad for phone) and can autofill the user's number.
 const FIELDS = [
-  { name: "make", placeholder: "Марка автомобиля", half: true },
-  { name: "model", placeholder: "Модель автомобиля", half: true },
-  { name: "year", placeholder: "Год выпуска", half: true },
-  { name: "phone", placeholder: "Ваш телефон", half: true },
-] as const;
+  {
+    name: "make",
+    placeholder: "Марка автомобиля",
+    type: "text",
+    autoComplete: "off",
+    autoCapitalize: "words",
+    enterKeyHint: "next",
+  },
+  {
+    name: "model",
+    placeholder: "Модель автомобиля",
+    type: "text",
+    autoComplete: "off",
+    autoCapitalize: "words",
+    enterKeyHint: "next",
+  },
+  {
+    name: "year",
+    placeholder: "Год выпуска",
+    type: "text",
+    inputMode: "numeric",
+    pattern: "(19|20)[0-9]{2}",
+    maxLength: 4,
+    autoComplete: "off",
+    enterKeyHint: "next",
+    title: "Год в формате ГГГГ, например 2015",
+  },
+  {
+    name: "phone",
+    placeholder: "Ваш телефон",
+    type: "tel",
+    inputMode: "tel",
+    autoComplete: "tel",
+    required: true,
+    enterKeyHint: "next",
+  },
+] as const satisfies ReadonlyArray<
+  React.InputHTMLAttributes<HTMLInputElement> & { name: string }
+>;
 
 export function ValuationForm() {
   const [submitted, setSubmitted] = useState(false);
@@ -40,9 +76,8 @@ export function ValuationForm() {
             {FIELDS.map((f) => (
               <input
                 key={f.name}
-                name={f.name}
-                type="text"
-                placeholder={f.placeholder}
+                {...f}
+                aria-label={f.placeholder}
                 className="w-full border border-black/10 bg-white px-4 py-3 text-[15px] text-brand-text placeholder:text-black/45 focus:border-brand-orange focus:outline-none"
               />
             ))}
@@ -51,6 +86,7 @@ export function ValuationForm() {
             name="info"
             rows={3}
             placeholder="Дополнительная информация"
+            aria-label="Дополнительная информация"
             className="w-full resize-none border border-black/10 bg-white px-4 py-3 text-[15px] text-brand-text placeholder:text-black/45 focus:border-brand-orange focus:outline-none"
           />
           <button

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Ubuntu, Roboto_Slab, Roboto } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
@@ -27,6 +27,15 @@ export const metadata: Metadata = {
   description:
     "AvtoCar — выкуп авто в Киеве с 2016 года. Деньги за 1 час, до 94% рыночной стоимости. Любое состояние, бесплатный выезд оценщика.",
   icons: { icon: "/seo/favicon.ico" },
+};
+
+// Mobile (Pixel 3 / Chrome Android): standard device-width viewport, pinch-zoom
+// left enabled for accessibility, and the browser chrome tinted to match the
+// dark header so the address bar doesn't flash white above it.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0f0f17",
 };
 
 export default function RootLayout({

@@ -15,13 +15,14 @@ export function WhyUs() {
         <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {ADVANTAGES.map((adv) => (
             <div key={adv.title} className="flex flex-col items-center text-center">
-              <div className="flex h-[130px] w-[130px] items-center justify-center rounded-full bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)]">
+              {/* the PNG already contains the white circle + small glyph, so it fills the circle */}
+              <div className="flex h-[130px] w-[130px] items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)]">
                 <Image
                   src={adv.icon}
                   alt={adv.title}
-                  width={60}
-                  height={60}
-                  className="h-[58px] w-[58px] object-contain"
+                  width={149}
+                  height={149}
+                  className="h-[130px] w-[130px] object-contain"
                 />
               </div>
               <h3 className="mt-5 font-heading text-[20px] font-medium text-brand-text">

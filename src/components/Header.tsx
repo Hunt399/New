@@ -21,6 +21,33 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // While the mobile menu is open: lock page scroll behind it, close on Escape,
+  // and close if the viewport grows to the desktop layout (e.g. rotation).
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = () => {
+      setMenuOpen(false);
+      setServicesOpen(false);
+    };
+    const root = document.documentElement;
+    const prevOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onDesktop = (e: MediaQueryListEvent) => {
+      if (e.matches) close();
+    };
+    window.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onDesktop);
+    return () => {
+      root.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onDesktop);
+    };
+  }, [menuOpen]);
+
   const closeMobile = () => {
     setMenuOpen(false);
     setServicesOpen(false);
@@ -36,18 +63,20 @@ export function Header() {
         scrolled || menuOpen
           ? "bg-brand-dark shadow-[0_2px_5px_rgba(0,0,0,0.1)]"
           : "bg-transparent",
+        // mobile menu takes the whole (dynamic) viewport so nothing scrolls behind it
+        menuOpen && "flex h-dvh flex-col lg:block lg:h-auto",
       )}
     >
-      <div className="mx-auto flex max-w-[1240px] items-center justify-between px-4">
+      <div className="mx-auto flex w-full max-w-[1240px] shrink-0 items-center justify-between px-4">
         {/* Logo + phones */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="block shrink-0">
+          <Link href="/" onClick={closeMobile} className="block shrink-0">
             <Image
               src="/images/logo.png"
               alt="AvtoCar"
               width={241}
               height={196}
-              priority
+              loading="eager"
               className={cn(
                 "w-auto transition-all duration-300",
                 scrolled ? "h-[50px] py-1" : "h-[72px] py-2",
@@ -133,19 +162,39 @@ export function Header() {
         {/* Mobile menu toggle */}
         <button
           type="button"
-          aria-label="Меню"
-          onClick={() => setMenuOpen((v) => !v)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
+          aria-label={menuOpen ? "Закрыть меню" : "Меню"}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          onClick={() => (menuOpen ? closeMobile() : setMenuOpen(true))}
+          className="-mr-2 flex h-12 w-12 flex-col items-center justify-center gap-1.5 lg:hidden"
         >
-          <span className="block h-0.5 w-6 bg-white" />
-          <span className="block h-0.5 w-6 bg-white" />
-          <span className="block h-0.5 w-6 bg-white" />
+          <span
+            className={cn(
+              "block h-0.5 w-6 bg-white transition-transform duration-300",
+              menuOpen && "translate-y-2 rotate-45",
+            )}
+          />
+          <span
+            className={cn(
+              "block h-0.5 w-6 bg-white transition-opacity duration-300",
+              menuOpen && "opacity-0",
+            )}
+          />
+          <span
+            className={cn(
+              "block h-0.5 w-6 bg-white transition-transform duration-300",
+              menuOpen && "-translate-y-2 -rotate-45",
+            )}
+          />
         </button>
       </div>
 
       {/* Mobile menu panel */}
       {menuOpen && (
-        <nav className="max-h-[80vh] overflow-y-auto bg-brand-dark px-4 pb-4 lg:hidden">
+        <nav
+          id="mobile-menu"
+          className="min-h-0 w-full flex-1 overflow-y-auto overscroll-contain bg-brand-dark px-4 pb-6 lg:hidden"
+        >
           {NAV_ITEMS.map((item) => (
             <div key={item.label}>
               <div className="flex items-center justify-between border-b border-white/10">
@@ -192,12 +241,12 @@ export function Header() {
               )}
             </div>
           ))}
-          <div className="flex flex-col gap-2 pt-3">
+          <div className="flex flex-col pt-2">
             {CONTACTS.phones.map((phone) => (
               <a
                 key={phone}
                 href={`tel:${phone.replace(/[^+\d]/g, "")}`}
-                className="flex items-center gap-2 text-[16px] text-brand-muted"
+                className="flex items-center gap-2 py-2.5 text-[16px] text-brand-muted"
               >
                 <PhoneIcon className="text-[13px]" />
                 {phone}
