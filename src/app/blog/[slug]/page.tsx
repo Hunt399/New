@@ -47,7 +47,7 @@ export default async function BlogPostPage({
                 fill
                 sizes="(min-width:860px) 860px, 100vw"
                 className="object-cover"
-                priority
+                loading="eager"
               />
             </div>
           )}

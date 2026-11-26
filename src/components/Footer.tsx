@@ -41,7 +41,7 @@ export function Footer() {
           <p className="text-[18px] font-medium text-white">{CONTACTS.address}</p>
           <a
             href="#"
-            className="mt-4 text-[15px] text-brand-orange transition-opacity hover:opacity-80"
+            className="mt-2 py-2 text-[15px] text-brand-orange transition-opacity hover:opacity-80"
           >
             Политика конфиденциальности
           </a>
@@ -54,11 +54,20 @@ export function Footer() {
           <p className="text-[15px] text-brand-orange">
             avtocare.com.ua © 2016-2022
           </p>
-          <div className="flex items-center gap-4 text-white/70">
-            <a href="#" aria-label="Facebook" className="hover:text-white">
+          {/* 44px touch targets, visually still 16px icons with the same spacing */}
+          <div className="-my-3 flex items-center text-white/70">
+            <a
+              href="#"
+              aria-label="Facebook"
+              className="flex h-11 w-11 items-center justify-center hover:text-white"
+            >
               <FacebookIcon className="text-[16px]" />
             </a>
-            <a href="#" aria-label="Карта сайта" className="hover:text-white">
+            <a
+              href="#"
+              aria-label="Карта сайта"
+              className="-ml-3 flex h-11 w-11 items-center justify-center hover:text-white"
+            >
               <SitemapIcon className="text-[16px]" />
             </a>
           </div>
